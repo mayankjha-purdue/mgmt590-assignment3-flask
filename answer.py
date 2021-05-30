@@ -5,6 +5,7 @@ from flask import request
 from transformers.pipelines import pipeline
 import os
 global modelList
+global default_model
 import sqlite3
 from flask import abort
 
@@ -39,6 +40,7 @@ modelList = [
         'model': "distilbert-base-uncased-distilled-squad"
     }
 ]
+default_model = modelList[0]
 
 # Create my flask app
 app = Flask(__name__)
@@ -49,13 +51,13 @@ app.config['JSON_SORT_KEYS'] = False
 # returns "Hello World"
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return 'Hello, World!'
 
 
 def insert_db(timestamp, model, answer,question,context):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO prodscale(timestamp, model, answer,question,context) VALUES (?, ?, ?, ?, ?)"
+    statement = "INSERT OR IGNORE INTO prodscale(timestamp, model, answer,question,context) VALUES (?, ?, ?, ?, ?)"
     cursor.execute(statement, [timestamp, model, answer,question,context])
     db.commit()
 
