@@ -32,11 +32,12 @@ jobs:
         docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         
-        
     - name: Run Tests
       run: |
-        python3 -m pip install --upgrade pip
-        pip install pytest
+      
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt 
+
         python -m pytest
         continue-on-error: false
         
