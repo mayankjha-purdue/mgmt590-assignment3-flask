@@ -13,6 +13,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    
+    - name: Run Tests
+      run: |
+        python -m pytest
+        continue-on-error: false
+        
     - name: Checkout
       uses: actions/checkout@v2
 
