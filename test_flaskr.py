@@ -4,6 +4,7 @@ from freezegun import freeze_time
 from answer import app
 from answer import modelList
 from answer import insert_db
+from answer import create_tables
 import answer
 from mock import patch
 
@@ -103,6 +104,7 @@ def test_delete_models_failure_bad_request():
 def test_answer_question_default_model():
 
     #default_model = modelList[0]
+    create_tables()
     freezer = freeze_time("2021-05-28 12:00:01")
     freezer.start()
     url = '/answer'
