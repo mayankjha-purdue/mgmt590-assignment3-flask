@@ -174,8 +174,7 @@ def test_get_answers_failure_bad_request():
 
     headers = {'Content-Type': 'application/json'}
     response = app.test_client().post(url, headers=headers)
-    mock_response_data=b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>The browser (or proxy) sent a request that this server could not understand.</p>\n'
-
+    mock_response_data=b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>Failed to decode JSON object: Expecting value: line 1 column 1 (char 0)</p>\n'
     #response = client.post(url, data=json.dumps(mock_request_data), headers=mock_request_headers)
     assert response.status_code == 400
     assert response.data == mock_response_data
