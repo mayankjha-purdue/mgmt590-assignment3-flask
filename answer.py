@@ -411,6 +411,6 @@ if __name__ == '__main__':
     #os.environ["DB_NAME"] = "postgres-prodscale"
     #os.environ["DB_PASS"] = "prodscale"
     #os.environ["DB_HOST"] = "35.232.200.40:5432"
-    create_tables()
+    
     default_model = modelList[0]
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), threaded=True)
