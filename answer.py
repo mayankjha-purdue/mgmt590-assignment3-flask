@@ -1,5 +1,6 @@
 import time
 from flask import Flask
+from flask import Flask, request
 from flask import jsonify
 from flask import request
 from transformers.pipelines import pipeline
@@ -12,13 +13,10 @@ from flask import abort
 import datetime
 import logging
 import os
-
 from flask import Flask, render_template, request, Response
 import sqlalchemy
 
-
-app = Flask(__name__)
-
+global db
 
 logger = logging.getLogger()
 def init_connection_engine():
@@ -111,7 +109,7 @@ def init_unix_connection_engine(db_config):
     db_host = os.environ.get('DB_HOST')
 
     db_socket_dir = os.environ.get("DB_SOCKET_DIR", "/cloudsql")
-    cloud_sql_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
+    cloud_sql_connection_name = os.environ.get("CLOUD_SQL_CONNECTION_NAME")
 
     pool = sqlalchemy.create_engine(
 
@@ -135,17 +133,17 @@ def init_unix_connection_engine(db_config):
     pool.dialect.description_encoding = None
     return pool
 
+app = Flask(__name__)
 
 # This global variable is declared with a value of `None`, instead of calling
 # `init_connection_engine()` immediately, to simplify testing. In general, it
 # is safe to initialize your database connection pool when your script starts
 # -- there is no need to wait for the first request.
-db = init_connection_engine()
 
-@app.before_first_request
+
 def create_tables():
-    global db
     db = init_connection_engine()
+
     # Create tables (if they don't already exist)
     with db.connect() as conn:
         conn.execute(
@@ -159,9 +157,7 @@ def create_tables():
 #     conn = sqlite3.connect(DATABASE_NAME)
 #     return conn
 
-def get_db():
-    conn = db.connect()
-    return conn
+
 
 # def create_tables():
 #     tables = [
@@ -201,6 +197,8 @@ def hello_world():
 
 
 def insert_db(timestamp, model, answer, question, context):
+    db = init_connection_engine()
+
 
     stmt = sqlalchemy.text(
         "INSERT INTO prodscale (timestamp, model, answer,question,context)"
@@ -225,6 +223,7 @@ def insert_db(timestamp, model, answer, question, context):
 
 def get_recent_default(start,end):
     db = init_connection_engine()
+
     with db.connect() as conn:
         stmt = sqlalchemy.text(
             "SELECT timestamp, model, answer, question,context FROM prodscale WHERE timestamp BETWEEN :start AND :end")
@@ -243,6 +242,7 @@ def get_recent_default(start,end):
 
 def get_recent_custom(start,end,model):
     db = init_connection_engine()
+
     with db.connect() as conn:
         stmt = sqlalchemy.text(
             "SELECT timestamp, model, answer, question,context FROM prodscale timestamp BETWEEN :start AND :end AND model=:model")
@@ -409,10 +409,6 @@ def getModels(modelList=modelList):
 # Run if running "python answer.py"
 if __name__ == '__main__':
     # Run our Flask app and start listening for requests!
-    #os.environ["DB_USER"] = "postgres"
-    #os.environ["DB_NAME"] = "postgres-prodscale"
-    #os.environ["DB_PASS"] = "prodscale"
-    #os.environ["DB_HOST"] = "35.232.200.40:5432"
     db = init_connection_engine()
     
     default_model = modelList[0]
