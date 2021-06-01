@@ -1,5 +1,5 @@
 import time
-from flask import Flask, app
+from flask import Flask
 from flask import jsonify
 from flask import request
 from transformers.pipelines import pipeline
@@ -15,6 +15,10 @@ import os
 
 from flask import Flask, render_template, request, Response
 import sqlalchemy
+
+
+app = Flask(__name__)
+
 
 logger = logging.getLogger()
 def init_connection_engine():
@@ -136,9 +140,9 @@ def init_unix_connection_engine(db_config):
 # `init_connection_engine()` immediately, to simplify testing. In general, it
 # is safe to initialize your database connection pool when your script starts
 # -- there is no need to wait for the first request.
-db = init_connection_engine()
+db = None
 
-
+@app.before_first_request
 def create_tables():
     global db
     db = init_connection_engine()
@@ -185,7 +189,7 @@ modelList = [
 default_model = modelList[0]
 
 # Create my flask app
-app = Flask(__name__)
+
 app.config['JSON_SORT_KEYS'] = False
 
 
