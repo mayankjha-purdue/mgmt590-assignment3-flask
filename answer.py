@@ -15,7 +15,6 @@ import logging
 import os
 from flask import Flask, render_template, request, Response
 import sqlalchemy
-
 global db
 
 logger = logging.getLogger()
