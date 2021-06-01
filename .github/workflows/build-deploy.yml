@@ -9,6 +9,11 @@ env:
   SERVICE: mgmt590-assignment3-flask
   REGION: us-central1
   CLOUD_SQL_CONNECTION_NAME: assignment-3-315306:us-central1:cloud-sql-postgres
+  DB_HOST: '35.232.200.40'
+  DB_PORT: '5432'
+  DB_NAME: 'postgres-prodscale'
+  DB_USER: 'postgres' 
+  DB_PASS: 'prodscale'
   
 
 
