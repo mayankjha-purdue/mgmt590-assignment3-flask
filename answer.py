@@ -413,10 +413,10 @@ if __name__ == '__main__':
     #     conn.execute(
     #         "CREATE TABLE IF NOT EXISTS prodscale(timestamp INT PRIMARY KEY,model TEXT NOT NULL,answer TEXT NOT NULL,question TEXT NOT NULL,context TEXT NOT NULL);")
 
-    #os.environ["DB_USER"] = "postgres"
-    #os.environ["DB_NAME"] = "postgres-prodscale"
-    #os.environ["DB_PASS"] = "prodscale"
-    #os.environ["DB_HOST"] = "35.232.200.40:5432"
+    os.environ["DB_USER"] = "postgres"
+    os.environ["DB_NAME"] = "postgres-prodscale"
+    os.environ["DB_PASS"] = "prodscale"
+    os.environ["DB_HOST"] = "35.232.200.40:5432"
     default_model = modelList[0]
     db = init_connection_engine()
     with db.connect() as conn:
