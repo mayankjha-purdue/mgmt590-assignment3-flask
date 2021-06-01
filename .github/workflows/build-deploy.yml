@@ -24,10 +24,14 @@ jobs:
       uses: actions/checkout@v2
       
     # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        project_id: assignment-3-315306:us-central1:cloud-sql-postgres
       
     - uses: mattes/gce-cloudsql-proxy-action@v1
       with:
-        creds: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        creds: ${{ secrets.GCP_SA_KEY }}
         instance: assignment-3-315306:us-central1:cloud-sql-postgres
 
     - name: Setup Cloud SDK
