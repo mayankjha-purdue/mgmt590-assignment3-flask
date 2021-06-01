@@ -136,8 +136,7 @@ def init_unix_connection_engine(db_config):
 # `init_connection_engine()` immediately, to simplify testing. In general, it
 # is safe to initialize your database connection pool when your script starts
 # -- there is no need to wait for the first request.
-db = None
-
+db = init_connection_engine()
 
 
 def create_tables():
