@@ -140,7 +140,7 @@ def init_unix_connection_engine(db_config):
 # `init_connection_engine()` immediately, to simplify testing. In general, it
 # is safe to initialize your database connection pool when your script starts
 # -- there is no need to wait for the first request.
-db = None
+db = init_connection_engine()
 
 @app.before_first_request
 def create_tables():
@@ -224,6 +224,7 @@ def insert_db(timestamp, model, answer, question, context):
 
 
 def get_recent_default(start,end):
+    db = init_connection_engine()
     with db.connect() as conn:
         stmt = sqlalchemy.text(
             "SELECT timestamp, model, answer, question,context FROM prodscale WHERE timestamp BETWEEN :start AND :end")
@@ -241,6 +242,7 @@ def get_recent_default(start,end):
         return jsonify(out)
 
 def get_recent_custom(start,end,model):
+    db = init_connection_engine()
     with db.connect() as conn:
         stmt = sqlalchemy.text(
             "SELECT timestamp, model, answer, question,context FROM prodscale timestamp BETWEEN :start AND :end AND model=:model")
@@ -411,6 +413,7 @@ if __name__ == '__main__':
     #os.environ["DB_NAME"] = "postgres-prodscale"
     #os.environ["DB_PASS"] = "prodscale"
     #os.environ["DB_HOST"] = "35.232.200.40:5432"
+    db = init_connection_engine()
     
     default_model = modelList[0]
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), threaded=True)
