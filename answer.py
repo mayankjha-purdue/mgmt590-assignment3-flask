@@ -107,7 +107,7 @@ def init_unix_connection_engine(db_config):
     db_host = os.environ.get('DB_HOST')
 
     db_socket_dir = os.environ.get("DB_SOCKET_DIR", "/cloudsql")
-    cloud_sql_connection_name = os.environ["CLOUD_SQL_CONNECTION_NAME"]
+    cloud_sql_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
 
     pool = sqlalchemy.create_engine(
 
