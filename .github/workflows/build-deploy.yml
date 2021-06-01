@@ -26,36 +26,10 @@ jobs:
       
     # Setup gcloud CLI
       
-    - name: Google Cloud SQL Proxy
-      run: | # write google application credentials to a temporary file to be used inside the container
-              mkdir -p /tmp/gce-cloudsql-proxy
-              echo '${{ inputs.creds }}' > /tmp/gce-cloudsql-proxy/key.json
-              # start container
-              docker run -d --net host --name gce-cloudsql-proxy --restart on-failure \
-              -v /tmp/gce-cloudsql-proxy:/tmp/gce-cloudsql-proxy \
-              gcr.io/cloudsql-docker/gce-proxy:${{ inputs.proxy_version }} \
-              /cloud_sql_proxy \
-                -credential_file /tmp/gce-cloudsql-proxy/key.json \
-                -dir /tmp \
-                -instances=${{ inputs.instance }}=tcp:35.232.200.40:5432
-              # wait until connections are accepted
-              sleep 3
-              isready=0
-              for i in {1..10}; do
-                echo "Wait for connections to be ready ... $i/10"
-                (${{ github.action_path }}/wait-for-it.sh --quiet --timeout=3 --host=35.232.200.40 --port=5432 || exit $?) && true # escape bash's pipefail
-                isready=$?
-                if [[ $isready -eq 0 ]]; then
-                  break
-                fi
-                sleep 2
-              done
-              # print container logs
-              docker logs gce-cloudsql-proxy
-              # exit with error code if we couldn't connect
-              if [[ $isready -ne 0 ]]; then
-                exit $isready 
-              fi
+    - uses: mattes/gce-cloudsql-proxy-action@v1
+      with:
+        creds: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        instance: assignment-3-315306:us-central1:cloud-sql-postgres
 
     - name: Setup Cloud SDK
       env:
