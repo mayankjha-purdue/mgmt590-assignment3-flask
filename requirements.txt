@@ -6,3 +6,5 @@ pandas==1.1.5
 pytest==6.2.4
 freezegun==1.1.0
 mock==4.0.3
+pg8000==1.19.5
+SQLAlchemy==1.4.17
