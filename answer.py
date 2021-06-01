@@ -197,7 +197,7 @@ def hello_world():
 
 
 def insert_db(timestamp, model, answer, question, context):
-    db = init_connection_engine()
+
 
 
     stmt = sqlalchemy.text(
@@ -222,7 +222,7 @@ def insert_db(timestamp, model, answer, question, context):
 
 
 def get_recent_default(start,end):
-    db = init_connection_engine()
+
 
     with db.connect() as conn:
         stmt = sqlalchemy.text(
@@ -241,7 +241,7 @@ def get_recent_default(start,end):
         return jsonify(out)
 
 def get_recent_custom(start,end,model):
-    db = init_connection_engine()
+
 
     with db.connect() as conn:
         stmt = sqlalchemy.text(
@@ -409,7 +409,19 @@ def getModels(modelList=modelList):
 # Run if running "python answer.py"
 if __name__ == '__main__':
     # Run our Flask app and start listening for requests!
-    db = init_connection_engine()
-    
+
+    # with db.connect() as conn:
+    #     conn.execute(
+    #         "CREATE TABLE IF NOT EXISTS prodscale(timestamp INT PRIMARY KEY,model TEXT NOT NULL,answer TEXT NOT NULL,question TEXT NOT NULL,context TEXT NOT NULL);")
+
+    #os.environ["DB_USER"] = "postgres"
+    #os.environ["DB_NAME"] = "postgres-prodscale"
+    #os.environ["DB_PASS"] = "prodscale"
+    #os.environ["DB_HOST"] = "35.232.200.40:5432"
     default_model = modelList[0]
+    db = init_connection_engine()
+    with db.connect() as conn:
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS prodscale(timestamp INT PRIMARY KEY,model TEXT NOT NULL,answer TEXT NOT NULL,question TEXT NOT NULL,context TEXT NOT NULL);")
+
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), threaded=True)
