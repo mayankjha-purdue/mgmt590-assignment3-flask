@@ -7,6 +7,12 @@ from answer import insert_db
 from answer import create_tables
 import answer
 from mock import patch
+import os
+
+os.environ["DB_USER"] = "postgres"
+os.environ["DB_NAME"] = "postgres-prodscale"
+os.environ["DB_PASS"] = "prodscale"
+os.environ["DB_HOST"] = "35.232.200.40:5432"
 
 
 def test_hello():
