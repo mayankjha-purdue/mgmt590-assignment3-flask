@@ -28,12 +28,7 @@ jobs:
           PROJECT_ID: ${{ secrets.GCP_PROJECT }}
           SERVICE: mgmt590-assignment3-flask
           REGION: us-central1
-          CLOUD_SQL_CONNECTION_NAME: assignment-3-315306:us-central1:cloud-sql-postgres
-          DB_HOST: '35.232.200.40'
-          DB_PORT: '5432'
-          DB_NAME: 'postgres-prodscale'
-          DB_USER: 'postgres' 
-          DB_PASS: 'prodscale'
+
       uses: google-github-actions/setup-gcloud@master
       with:
 
@@ -47,12 +42,7 @@ jobs:
           PROJECT_ID: ${{ secrets.GCP_PROJECT }}
           SERVICE: mgmt590-assignment3-flask
           REGION: us-central1
-          CLOUD_SQL_CONNECTION_NAME: assignment-3-315306:us-central1:cloud-sql-postgres
-          DB_HOST: '35.232.200.40'
-          DB_PORT: '5432'
-          DB_NAME: 'postgres-prodscale'
-          DB_USER: 'postgres' 
-          DB_PASS: 'prodscale'
+
       run: gcloud auth configure-docker
 
     - name: Build and Push Container
@@ -60,12 +50,7 @@ jobs:
           PROJECT_ID: ${{ secrets.GCP_PROJECT }}
           SERVICE: mgmt590-assignment3-flask
           REGION: us-central1
-          CLOUD_SQL_CONNECTION_NAME: assignment-3-315306:us-central1:cloud-sql-postgres
-          DB_HOST: '35.232.200.40'
-          DB_PORT: '5432'
-          DB_NAME: 'postgres-prodscale'
-          DB_USER: 'postgres' 
-          DB_PASS: 'prodscale'
+
       run: |-
         docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
@@ -75,12 +60,7 @@ jobs:
           PROJECT_ID: ${{ secrets.GCP_PROJECT }}
           SERVICE: mgmt590-assignment3-flask
           REGION: us-central1
-          CLOUD_SQL_CONNECTION_NAME: assignment-3-315306:us-central1:cloud-sql-postgres
-          DB_HOST: '35.232.200.40'
-          DB_PORT: '5432'
-          DB_NAME: 'postgres-prodscale'
-          DB_USER: 'postgres' 
-          DB_PASS: 'prodscale'
+
       run: |
       
         python -m pip install --upgrade pip
@@ -92,12 +72,7 @@ jobs:
           PROJECT_ID: ${{ secrets.GCP_PROJECT }}
           SERVICE: mgmt590-assignment3-flask
           REGION: us-central1
-          CLOUD_SQL_CONNECTION_NAME: assignment-3-315306:us-central1:cloud-sql-postgres
-          DB_HOST: '35.232.200.40'
-          DB_PORT: '5432'
-          DB_NAME: 'postgres-prodscale'
-          DB_USER: 'postgres' 
-          DB_PASS: 'prodscale'
+
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v0.4.0
       with:
