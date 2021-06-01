@@ -22,6 +22,17 @@ jobs:
         
     - name: Checkout
       uses: actions/checkout@v2
+      
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        project_id: assignment-3-315306:us-central1:cloud-sql-postgres
+      
+    - uses: mattes/gce-cloudsql-proxy-action@v1
+      with:
+        creds: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        instance: assignment-3-315306:us-central1:cloud-sql-postgres
 
     - name: Setup Cloud SDK
       env:
@@ -68,6 +79,8 @@ jobs:
         service: ${{ env.SERVICE }}
         image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         region: ${{ env.REGION }}
+        
+
 
     - name: Show Output
       run: echo ${{ steps.deploy.outputs.url }}
