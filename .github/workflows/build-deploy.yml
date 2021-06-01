@@ -27,7 +27,7 @@ jobs:
       
     - uses: mattes/gce-cloudsql-proxy-action@v1
       with:
-        creds: ${{ secrets.GCP_SA_KEY }}
+        creds: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         instance: assignment-3-315306:us-central1:cloud-sql-postgres
 
     - name: Setup Cloud SDK
