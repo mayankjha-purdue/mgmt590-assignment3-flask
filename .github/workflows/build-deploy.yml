@@ -33,7 +33,7 @@ jobs:
         
     - name: Run Tests
       run: |-
-        docker run -w gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }} pytest -vv
+        docker run -w /app gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }} pytest -vv
         
     - name: Deploy to Cloud Run
       id: deploy
