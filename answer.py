@@ -5,6 +5,8 @@ from flask import jsonify
 from flask import request
 from transformers.pipelines import pipeline
 import os
+import pg8000
+
 global modelList
 global default_model
 import sqlite3
@@ -18,33 +20,54 @@ import sqlalchemy
 global db
 
 logger = logging.getLogger()
-
 # importing the psycopg2 module
-
+import psycopg2
 
 import os
 
 import psycopg2
-    # Format DB connection information
+
+# Format DB connection information
+os.mkdir('.ssl')
+
+rootcertfile = os.environ.get('PG_SSLROOTCERT')
+rootcertfile = rootcertfile.replace('@', '=')
+with open('.ssl/server-ca.pem', 'w') as f:
+    f.write(rootcertfile)
+
+clientcertfile = os.environ.get('PG_SSLCERT')
+clientcertfile = clientcertfile.replace('@', '=')
+with open('.ssl/client-cert.pem', 'w') as f:
+    f.write(clientcertfile)
+
+clientkeyfile = os.environ.get('PG_SSLKEY')
+with open('.ssl/client-key.pem', 'w') as f:
+    f.write(clientkeyfile)
+
+os.chmod(".ssl/client-key.pem", 0o600)
+os.chmod(".ssl/client-cert.pem", 0o600)
+os.chmod(".ssl/server-ca.pem", 0o600)
+
 sslmode = "sslmode=verify-ca"
-sslrootcert = "sslrootcert={}".format(os.environ.get('PG_SSLROOTCERT'))
-sslcert = "sslcert={}".format(os.environ.get('PG_SSLCERT'))
-sslkey = "sslkey={}".format(os.environ.get('PG_SSLKEY'))
+sslrootcert = "sslrootcert={}".format(".ssl/server-ca.pem")
+sslcert = "sslcert={}".format(".ssl/client-cert.pem")
+sslkey = "sslkey={}".format(".ssl/client-key.pem")
+
 hostaddr = "hostaddr={}".format(os.environ.get('PG_HOST'))
 user = "user=postgres"
-password = "password={}".format(os.environ.get('PG_PASSWORD'))#.format(os.environ.get('PG_PASSWORD'))
+password = "password={}".format(os.environ.get('PG_PASSWORD'))
 dbname = "dbname=mgmt590"
 # Construct database connect string
 db_connect_string = " ".join([
-      sslmode,
-      sslrootcert,
-      sslcert,
-      sslkey,
-      hostaddr,
-      user,
-      password,
-      dbname
-    ])
+    sslmode,
+    sslrootcert,
+    sslcert,
+    sslkey,
+    hostaddr,
+    user,
+    password,
+    dbname
+])
 # # storing all the information
 # database = 'mgmt590'
 # user = 'postgres'
@@ -172,6 +195,7 @@ db_connect_string = " ".join([
 
 app = Flask(__name__)
 
+
 # This global variable is declared with a value of `None`, instead of calling
 # `init_connection_engine()` immediately, to simplify testing. In general, it
 # is safe to initialize your database connection pool when your script starts
@@ -196,7 +220,6 @@ def create_tables():
 # def get_db():
 #     conn = sqlite3.connect(DATABASE_NAME)
 #     return conn
-
 
 
 # def create_tables():
@@ -237,19 +260,17 @@ def hello_world():
 
 
 def insert_db(timestamp, model, answer, question, context):
-
     conn = psycopg2.connect(db_connect_string)
     # Open a cursor to perform database operations
     cur = conn.cursor()
     # conn = sqlite3.connect('database.db')
-    #Creating tables
+    # Creating tables
 
     postgres_insert_query = "INSERT INTO prodscale (timestamp, model, answer,question,context) VALUES (%s,%s,%s,%s,%s)"
 
-    record_to_insert = (timestamp,model,answer,question,context)
+    record_to_insert = (timestamp, model, answer, question, context)
     cur.execute(postgres_insert_query, record_to_insert)
     conn.commit()
-
 
     # stmt = sqlalchemy.text(
     #     "INSERT INTO prodscale (timestamp, model, answer,question,context)"
@@ -272,44 +293,46 @@ def insert_db(timestamp, model, answer, question, context):
     #     )
 
 
-def get_recent_default(start,end):
-        conn = psycopg2.connect(db_connect_string)
-        # Open a cursor to perform database operations
-        cur = conn.cursor()
-        postgres_insert_query ="SELECT timestamp, model, answer, question,context FROM prodscale WHERE timestamp BETWEEN %s AND %s"
-        record_to_insert = (start,end)
-        cur.execute(postgres_insert_query, record_to_insert)
-        result = cur.fetchall()
+def get_recent_default(start, end):
+    conn = psycopg2.connect(db_connect_string)
+    # Open a cursor to perform database operations
+    cur = conn.cursor()
+    postgres_insert_query = "SELECT timestamp, model, answer, question,context FROM prodscale WHERE timestamp BETWEEN %s AND %s"
+    record_to_insert = (start, end)
+    cur.execute(postgres_insert_query, record_to_insert)
+    result = cur.fetchall()
 
-        #result = conn.execute(stmt, start=start, end=end).fetchall()
-        out = []
-        for index, tuple in enumerate(result):
-            dict = {
-                "timestamp": tuple[0],
-                "model": tuple[1],
-                "answer": tuple[2],
-                "question": tuple[3],
-                "context": tuple[4]}
-            out.append(dict)
+    # result = conn.execute(stmt, start=start, end=end).fetchall()
+    out = []
+    for index, tuple in enumerate(result):
+        dict = {
+            "timestamp": tuple[0],
+            "model": tuple[1],
+            "answer": tuple[2],
+            "question": tuple[3],
+            "context": tuple[4]}
+        out.append(dict)
 
-        return jsonify(out)
+    return jsonify(out)
 
-def get_recent_custom(start,end,model):
+
+def get_recent_custom(start, end, model):
     conn = psycopg2.connect(db_connect_string)
     # Open a cursor to perform database operations
     cur = conn.cursor()
     postgres_insert_query = "SELECT timestamp, model, answer, question,context FROM prodscale WHERE timestamp BETWEEN %s AND %s model= %s"
-    record_to_insert = (start, end,model)
+    record_to_insert = (start, end, model)
     cur.execute(postgres_insert_query, record_to_insert)
     result = cur.fetchall()
+
     out = []
     for index, tuple in enumerate(result):
         dict = {
-                "timestamp": tuple[0],
-                "model": tuple[1],
-                "answer": tuple[2],
-                "question": tuple[3],
-                "context": tuple[4]}
+            "timestamp": tuple[0],
+            "model": tuple[1],
+            "answer": tuple[2],
+            "question": tuple[3],
+            "context": tuple[4]}
         out.append(dict)
 
         return jsonify(out)
@@ -394,11 +417,11 @@ def answers():
         end = request.args.get('end')
 
         if (model == None):
-                return get_recent_default(start,end)
+            return get_recent_default(start, end)
 
         else:
 
-            return get_recent_custom(start,end,model)
+            return get_recent_custom(start, end, model)
 
 
 @app.route("/models", methods=['GET', 'PUT', 'DELETE'])
