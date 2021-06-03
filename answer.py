@@ -5,7 +5,6 @@ from flask import jsonify
 from flask import request
 from transformers.pipelines import pipeline
 import os
-import pg8000
 global modelList
 global default_model
 import sqlite3
@@ -19,11 +18,6 @@ import sqlalchemy
 global db
 
 logger = logging.getLogger()
-
-
-import postgres
-# importing the psycopg2 module
-import psycopg2
 
 import os
 
