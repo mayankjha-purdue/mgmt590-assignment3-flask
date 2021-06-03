@@ -5,6 +5,8 @@ from flask import jsonify
 from flask import request
 from transformers.pipelines import pipeline
 import os
+import pg8000
+
 global modelList
 global default_model
 import sqlite3
@@ -25,10 +27,14 @@ import os
 
 import psycopg2
 
-# Format DB connection information
-os.mkdir('.ssl')
+import shutil
 
-rootcertfile = os.environ.get('PG_SSLROOTCERT')
+dir = '.ssl'
+if os.path.exists(dir):
+    shutil.rmtree(dir)
+os.makedirs(dir)
+
+rootcertfile = "os.environ.get('PG_SSLROOTCERT')"
 rootcertfile = rootcertfile.replace('@', '=')
 with open('.ssl/server-ca.pem', 'w') as f:
     f.write(rootcertfile)
@@ -39,6 +45,8 @@ with open('.ssl/client-cert.pem', 'w') as f:
     f.write(clientcertfile)
 
 clientkeyfile = os.environ.get('PG_SSLKEY')
+clientkeyfile = clientkeyfile.replace('@', '=')
+
 with open('.ssl/client-key.pem', 'w') as f:
     f.write(clientkeyfile)
 
