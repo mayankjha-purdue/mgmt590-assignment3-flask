@@ -5,7 +5,6 @@ from flask import jsonify
 from flask import request
 from transformers.pipelines import pipeline
 import os
-import pg8000
 
 global modelList
 global default_model
