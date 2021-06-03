@@ -19,22 +19,20 @@ global db
 
 logger = logging.getLogger()
 
+# importing the psycopg2 module
+
+
 import os
 
 import psycopg2
     # Format DB connection information
-os.environ["PG_SSLROOTCERT"] = "ssl/server-ca.pem"
-os.environ["PG_SSLCERT"] = "ssl/client-cert.pem"
-os.environ["PG_SSLKEY"] = "ssl/client-key.pem"
-
-# Format DB connection information
 sslmode = "sslmode=verify-ca"
 sslrootcert = "sslrootcert={}".format(os.environ.get('PG_SSLROOTCERT'))
 sslcert = "sslcert={}".format(os.environ.get('PG_SSLCERT'))
 sslkey = "sslkey={}".format(os.environ.get('PG_SSLKEY'))
-hostaddr = "hostaddr=34.69.30.181"#.format(os.environ.get('PG_HOST'))
+hostaddr = "hostaddr={}".format(os.environ.get('PG_HOST'))
 user = "user=postgres"
-password = "password=prodscale"#.format(os.environ.get('PG_PASSWORD'))
+password = "password={}".format(os.environ.get('PG_PASSWORD'))#.format(os.environ.get('PG_PASSWORD'))
 dbname = "dbname=mgmt590"
 # Construct database connect string
 db_connect_string = " ".join([
