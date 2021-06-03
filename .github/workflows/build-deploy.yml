@@ -33,6 +33,7 @@ jobs:
         
     - name: Run Tests
       run: |-
+        docker run -e PG_HOST=${{env.PG_HOST}} PG_SSLCERT=${{env.PG_SSLCERT}} PG_SSLROOTCERT=${{env.PG_SSLROOTCERT}} PG_SSLKEY=${{env.PG_SSLKEY}} PG_PASSWORD=${{env.PG_PASSWORD}}
         docker run -w /app gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} pytest -vv
 
     - name: Deploy to Cloud Run
