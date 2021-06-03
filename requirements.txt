@@ -8,3 +8,4 @@ freezegun==1.1.0
 mock==4.0.3
 pg8000==1.19.5
 SQLAlchemy==1.4.17
+psycopg2-binary==2.8.6
