@@ -519,6 +519,9 @@ Related documentation is available [here](https://github.com/GoogleCloudPlatform
 
 ## Part 7: Integrating with Testing and Writing tests with flask
 
+![pytest](./images/3594036-middle.png)
+
+
 ### Client setup
 
 We will assume you have a `your_app.py` file defined in the root of your working
