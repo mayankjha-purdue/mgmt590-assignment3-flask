@@ -29,9 +29,6 @@ import psycopg2
 
 import shutil
 
-app = Flask(__name__)
-
-
 dir = '.ssl'
 if os.path.exists(dir):
     shutil.rmtree(dir)
@@ -219,7 +216,10 @@ def create_tables():
     cur.execute(
         "CREATE TABLE IF NOT EXISTS prodscale (timestamp INT, model VARCHAR, answer VARCHAR, question VARCHAR, context VARCHAR);")
     conn.commit()
+    
+create_tables()
 
+app = Flask(__name__)
 
 # DATABASE_NAME = "prodscale.db"
 #
@@ -504,7 +504,7 @@ if __name__ == '__main__':
     # os.environ["DB_PASS"] = "prodscale"
     # os.environ["DB_HOST"] = "35.232.200.40:5432"
     default_model = modelList[0]
-    create_tables()
+    
     # with db.connect() as conn:
     #     conn.execute(
     #         "CREATE TABLE IF NOT EXISTS prodscale(timestamp INT PRIMARY KEY,model TEXT NOT NULL,answer TEXT NOT NULL,question TEXT NOT NULL,context TEXT NOT NULL);")
