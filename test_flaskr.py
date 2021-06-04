@@ -211,7 +211,7 @@ def test_answer_question_given_model():
 
     mock_response_data2 = b'{"timestamp":1622203201,"model":"bert-tiny","answer":"bully Leigh-Ann Galloway","question":"who did holly matthews play in waterloo rd?","context":"She attended the British drama school East 15 in 2005,and left after winning a high-profile role in the BBC drama Waterloo Road, playing the bully Leigh-Ann Galloway.[6] Since that role, Matthews has continued to act in BBC\'s Doctors, playing Connie Whitfield; in ITV\'s The Bill playing drug addict Josie Clarke; and she was back in the BBC soap Doctors in 2009, playing Tansy Flack."}\n'
     #assert response.data == mock_response_data2
-    assert response.status_code == 500
+    assert response.status_code == 200
     freezer.stop()
 
 def test_get_answers_failure_bad_request():
@@ -225,7 +225,7 @@ def test_get_answers_failure_bad_request():
 
     headers = {'Content-Type': 'application/json'}
     response = app.test_client().post(url, headers=headers)
-    mock_response_data=b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>The browser (or proxy) sent a request that this server could not understand.</p>\n'
+    mock_response_data=b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>Failed to decode JSON object: Expecting value: line 1 column 1 (char 0)</p>\n'
 
     #response = client.post(url, data=json.dumps(mock_request_data), headers=mock_request_headers)
     assert response.status_code == 400
@@ -268,7 +268,7 @@ def test_get_recent_given_model():
 
     mock_response_data2 = b'{"timestamp":1622203201,"model":"bert-tiny","answer":"bully Leigh-Ann Galloway","question":"who did holly matthews play in waterloo rd?","context":"She attended the British drama school East 15 in 2005,and left after winning a high-profile role in the BBC drama Waterloo Road, playing the bully Leigh-Ann Galloway.[6] Since that role, Matthews has continued to act in BBC\'s Doctors, playing Connie Whitfield; in ITV\'s The Bill playing drug addict Josie Clarke; and she was back in the BBC soap Doctors in 2009, playing Tansy Flack."}\n'
     #assert response.data == mock_response_data2
-    assert response.status_code == 500
+    assert response.status_code == 200
 
     start ="1622203100"
     end = "1622203300"
