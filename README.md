@@ -3,7 +3,7 @@
 ## Creating Flask Application with Integrated Testing - Question Answering
 
 Purpose of the this hands-on project was to create a REST API inference server that serves inferences from a Transformers NLP model
-The app is deployed at: https://mgmt590-assignment-2-kbmrvvvzgq-uc.a.run.app
+The app is deployed at: https://mgmt590-assignment3-flask-flmzcdy22a-uc.a.run.app/
 
 ![sqlite-python-flask](./images/sqlite-python-flask.jpeg)
 ![gc](./images/gcloud.png)
