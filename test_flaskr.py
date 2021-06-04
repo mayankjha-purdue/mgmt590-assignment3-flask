@@ -290,7 +290,7 @@ def test_get_recent_given_model():
     #mock_response_data3 = b'[{"timestamp":1622203201,"model":"bert-tiny","answer":"bully Leigh-Ann Galloway","question":"who did holly matthews play in waterloo rd?","context":"She attended the British drama school East 15 in 2005,and left after winning a high-profile role in the BBC drama Waterloo Road, playing the bully Leigh-Ann Galloway.[6] Since that role, Matthews has continued to act in BBC\'s Doctors, playing Connie Whitfield; in ITV\'s The Bill playing drug addict Josie Clarke; and she was back in the BBC soap Doctors in 2009, playing Tansy Flack."}]\n'
     mock_response_data3 = b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>500 Internal Server Error</title>\n<h1>Internal Server Error</h1>\n<p>The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.</p>\n'
     #assert response.data == mock_response_data3
-    assert response.status_code == 500
+    assert response.status_code == 200
 
     freezer.stop()
 
