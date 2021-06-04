@@ -29,6 +29,9 @@ import psycopg2
 
 import shutil
 
+app = Flask(__name__)
+
+
 dir = '.ssl'
 if os.path.exists(dir):
     shutil.rmtree(dir)
@@ -198,8 +201,6 @@ db_connect_string = " ".join([
 #     # [END cloud_sql_postgres_sqlalchemy_create_socket]
 #     pool.dialect.description_encoding = None
 #     return pool
-
-app = Flask(__name__)
 
 
 # This global variable is declared with a value of `None`, instead of calling
