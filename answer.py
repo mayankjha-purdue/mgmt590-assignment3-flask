@@ -342,7 +342,7 @@ def get_recent_custom(start, end, model):
             "context": tuple[4]}
         out.append(dict)
 
-        return jsonify(out)
+    return jsonify(out)
 
 
 def my_funct(text):
