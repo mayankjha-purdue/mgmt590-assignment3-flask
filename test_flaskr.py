@@ -6,11 +6,17 @@ from answer import modelList
 from mock import patch
 import os
 #
+import shutil
 
 dir = '.ssl'
 if os.path.exists(dir):
     shutil.rmtree(dir)
 os.makedirs(dir)
+
+rootcertfile = os.environ.get('PG_SSLROOTCERT')
+rootcertfile = rootcertfile.replace('@', '=')
+with open('.ssl/server-ca.pem', 'w') as f:
+    f.write(rootcertfile)
 
 clientcertfile = os.environ.get('PG_SSLCERT')
 clientcertfile = clientcertfile.replace('@', '=')
@@ -23,14 +29,6 @@ clientkeyfile = clientkeyfile.replace('@', '=')
 with open('.ssl/client-key.pem', 'w') as f:
     f.write(clientkeyfile)
 
-rootcertfile = os.environ.get('PG_ROOT')
-
-with open('.ssl/server-ca.pem', 'w') as f:
-    f.write(rootcertfile)
-
-
-
-
 os.chmod(".ssl/client-key.pem", 0o600)
 os.chmod(".ssl/client-cert.pem", 0o600)
 os.chmod(".ssl/server-ca.pem", 0o600)
@@ -40,9 +38,9 @@ sslrootcert = "sslrootcert={}".format(".ssl/server-ca.pem")
 sslcert = "sslcert={}".format(".ssl/client-cert.pem")
 sslkey = "sslkey={}".format(".ssl/client-key.pem")
 
-hostaddr = "hostaddr=34.69.30.181"
+hostaddr = "hostaddr={}".format(os.environ.get('PG_HOST'))
 user = "user=postgres"
-password = "password=prodscale"
+password = "password={}".format(os.environ.get('PG_PASSWORD'))
 dbname = "dbname=mgmt590"
 # Construct database connect string
 db_connect_string = " ".join([
