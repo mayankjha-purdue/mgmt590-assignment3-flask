@@ -327,7 +327,7 @@ def get_recent_custom(start, end, model):
     conn = psycopg2.connect(db_connect_string)
     # Open a cursor to perform database operations
     cur = conn.cursor()
-    postgres_insert_query = "SELECT timestamp, model, answer, question,context FROM prodscale WHERE timestamp BETWEEN %s AND %s model= %s"
+    postgres_insert_query = "SELECT timestamp, model, answer, question,context FROM prodscale WHERE timestamp BETWEEN %s AND %s AND model= %s"
     record_to_insert = (start, end, model)
     cur.execute(postgres_insert_query, record_to_insert)
     result = cur.fetchall()
