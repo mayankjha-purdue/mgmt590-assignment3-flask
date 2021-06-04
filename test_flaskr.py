@@ -3,9 +3,6 @@ import json
 from freezegun import freeze_time
 from answer import app
 from answer import modelList
-from answer import insert_db
-from answer import create_tables
-import answer
 from mock import patch
 # import os
 #
