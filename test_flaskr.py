@@ -7,6 +7,9 @@ from mock import patch
 # import os
 #
 
+rootcertfile = os.environ.get('PG_SSLROOTCERT')
+clientcertfile = os.environ.get('PG_SSLCERT')
+clientkeyfile = os.environ.get('PG_SSLKEY')
 
 def test_hello():
     response = app.test_client().get('/')
