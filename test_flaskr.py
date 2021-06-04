@@ -4,7 +4,7 @@ from freezegun import freeze_time
 from answer import app
 from answer import modelList
 from mock import patch
-# import os
+import os
 #
 
 rootcertfile = os.environ.get('PG_SSLROOTCERT')
