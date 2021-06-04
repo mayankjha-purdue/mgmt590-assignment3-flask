@@ -516,3 +516,114 @@ Related documentation is available [here](https://github.com/GoogleCloudPlatform
           --platform "managed" \
           --allow-unauthenticated
 ```
+
+## Part 7: Integrating with Testing and Writing tests with flask
+
+### Client setup
+
+We will assume you have a `your_app.py` file defined in the root of your working
+directory. This files instantiate your app. It could be as simple as the following
+snippet:
+
+```py
+from flask import Flask
+
+app = Flask(__name__)
+# ...
+# Load config
+# Register blueprints / extension
+```
+
+Let's write a test:
+
+```py
+class TestLogin:
+    def test_hello():
+        response = app.test_client().get('/')
+
+        assert response.status_code == 200
+        assert response.data == b'Hello, World!'
+```
+
+But what is this "client" parameter?
+This client parameter is a [pytest fixture](https://docs.pytest.org/en/latest/fixture.html).
+Fixtures are automatically loaded a `conftest.py` in (or above) the directory
+where the test is defined.
+
+We'll have to starting from the Flask instance to make fixtures.
+The first thing to understand is that the Flask instance is an object
+like any other with which you an play around.
+You can open an `ipython` session and simply import your app object and have fun
+with it (this is a real debug advice)!
+
+
+```py
+import pytest
+
+from your_app import app as _app
+
+@pytest.fixture
+def client(app):
+    """Get a test client for your Flask app"""
+    return app.test_client()
+
+@pytest.fixture
+def app():
+    """Yield your app with its context set up and ready"""
+
+    with _app.app_context():
+        yield _app
+```
+
+As you can see, a pytest fixture can return or yield an object.
+If an object is yielded, the part of the function after `yield` is run
+after the test finish, during the tear-down process.
+
+The `with` keyword above manages the context for us.
+The `app` fixture could as well be written as follows:
+
+```py
+import pytest
+
+from your_app import app as _app
+
+@pytest.fixture
+def app():
+    """Yield your app with its context set up and ready"""
+    # Set up: Establish an application context
+    ctx = _app.app_context()
+    ctx.push()
+
+    yield _app
+
+    # Tear down: run this after the tests are completed
+    ctx.pop()
+```
+
+
+Going back to our test, it's still a bit ugly. We could write it as follows:
+
+```py
+from flask import url_for
+
+class TestLogin:
+    def test_login_page(self, client):
+        # Use url_for to generate the URL for the endpoint directing the route "/login".
+        # If you want to test the logic of user.login, there is no need to include
+        # the route in the tests.
+        response = client.get(url_for("user.login"))
+        assert response.status_code == 200
+```
+
+### Test Cases For our Project
+
+I have made 10 test cases for testing all the REST API's
+
+GET,PUT,POST and DELETE
+
+### Running the test file
+
+```py
+pytest -vv
+```
+
