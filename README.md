@@ -1,6 +1,6 @@
-# Assignment 2 : MGMT 590, Production Scale Data Products, Summer 2021
+# Assignment 3 : MGMT 590, Production Scale Data Products, Summer 2021
 
-## Creating Flask Application - Question Answering
+## Creating Flask Application with Integrated Testing - Question Answering
 
 Purpose of the this hands-on project was to create a REST API inference server that serves inferences from a Transformers NLP model
 The app is deployed at: https://mgmt590-assignment-2-kbmrvvvzgq-uc.a.run.app
@@ -38,6 +38,10 @@ master branch of your GitHub repository
 - Part 5 - Building and running the API locally
 
 - Part 6 - CI/CD with Github Actions and Google Cloud Run
+
+- Part 7 - Integrating Testing with Testing
+
+
 
 
 
