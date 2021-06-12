@@ -367,7 +367,7 @@ def get_recent_custom(start, end, model):
 def my_funct(text):
     abort(400, text)
 
-@app.route("/upload", methods=['POST'])
+@app.route("upload", methods=['POST'])
 def upload_file():
    if 'file' not in request.files:
        return ('No file Provided')
