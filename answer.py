@@ -34,6 +34,22 @@ if os.path.exists(dir):
     shutil.rmtree(dir)
 os.makedirs(dir)
 
+
+
+# setting gcs creds for access to bucket
+filecontents = os.environ.get('GCS_CREDS')
+
+decoded_creds = base64.b64decode(filecontents)
+with open('creds.json', 'wb') as f:
+    f.write(decoded_creds)
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = 'creds.json'
+
+# getting bucket details
+bucket_name = os.environ.get('STORAGE_BUCKET')
+storage_client = storage.Client()
+bucket = storage_client.get_bucket('mgmt590-mayank')
+
+
 rootcertfile = os.environ.get('PG_SSLROOTCERT')
 rootcertfile = rootcertfile.replace('@', '=')
 with open('.ssl/server-ca.pem', 'w') as f:
@@ -348,7 +364,21 @@ def get_recent_custom(start, end, model):
 def my_funct(text):
     abort(400, text)
 
+@app.route("/upload", methods=['POST'])
+def upload_file():
+   if 'file' not in request.files:
+       return ('No file Provided')
+       file = request.files['file']
+       if file and allowed_file(file.filename):
+          dataFrame = pd.read_csv(file)
+          timestamp = int(time.time())
+          fileName = 'question_context' + '_' + str(timestamp) + '.csv'
+          csvFile = dataFrame.to_csv(fileName, index=False)
+          response = uploadOneFile(bucket, fileName)
+        return jsonify({"status": "File Uploaded Successfully", "status code": 200})
 
+return app
+    
 @app.route("/answer", methods=['POST', 'GET'])
 def answers():
     if request.method == 'POST':
