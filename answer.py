@@ -42,7 +42,7 @@ os.makedirs(dir)
 
 # setting gcs creds for access to bucket
 filecontents = os.environ.get('GCS_CREDS')
-
+filecontents.replace("=", "@")
 decoded_creds = base64.b64decode(filecontents)
 with open('creds.json', 'wb') as f:
     f.write(decoded_creds)
