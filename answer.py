@@ -39,7 +39,6 @@ if os.path.exists(dir):
 os.makedirs(dir)
 
 
-
 # setting gcs creds for access to bucket
 filecontents = os.environ.get('GCS_CREDS')
 filecontents.replace('@', '=')
