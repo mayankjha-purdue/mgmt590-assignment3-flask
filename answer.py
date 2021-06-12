@@ -370,15 +370,15 @@ def my_funct(text):
 @app.route("/upload", methods=['POST'])
 def upload_file():
    if 'file' not in request.files:
-       return ('No file Provided')
-       file = request.files['file']
-       if file and allowed_file(file.filename):
-          dataFrame = pd.read_csv(file)
-          timestamp = int(time.time())
-          fileName = 'question_context' + '_' + str(timestamp) + '.csv'
-          csvFile = dataFrame.to_csv(fileName, index=False)
-          response = uploadOneFile(bucket, fileName)
-       return jsonify({"status": "File Uploaded Successfully", "status code": 200})
+      return ('No file Provided')
+      file = request.files['file']
+   if file and allowed_file(file.filename):
+      dataFrame = pd.read_csv(file)
+      timestamp = int(time.time())
+      fileName = 'question_context' + '_' + str(timestamp) + '.csv'
+      csvFile = dataFrame.to_csv(fileName, index=False)
+      response = uploadOneFile(bucket, fileName)
+      return jsonify({"status": "File Uploaded Successfully", "status code": 200})
 
     
 @app.route("/answer", methods=['POST', 'GET'])
