@@ -377,7 +377,6 @@ def upload_file():
           response = uploadOneFile(bucket, fileName)
        return jsonify({"status": "File Uploaded Successfully", "status code": 200})
 
-return app
     
 @app.route("/answer", methods=['POST', 'GET'])
 def answers():
