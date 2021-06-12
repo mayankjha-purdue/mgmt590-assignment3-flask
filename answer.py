@@ -48,7 +48,7 @@ with open('app/creds.json', 'wb') as f1:
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/app/creds.json'
 
 # getting bucket details
-bucket_name = os.environ.get('STORAGE_BUCKET')
+#bucket_name = os.environ.get('STORAGE_BUCKET')
 storage_client = storage.Client()
 bucket = storage_client.get_bucket('mgmt590-mayank')
 
@@ -367,7 +367,7 @@ def get_recent_custom(start, end, model):
 def my_funct(text):
     abort(400, text)
 
-@app.route("upload", methods=['POST'])
+@app.route("/upload", methods=['POST'])
 def upload_file():
    if 'file' not in request.files:
        return ('No file Provided')
