@@ -375,7 +375,7 @@ def upload_file():
           fileName = 'question_context' + '_' + str(timestamp) + '.csv'
           csvFile = dataFrame.to_csv(fileName, index=False)
           response = uploadOneFile(bucket, fileName)
-        return jsonify({"status": "File Uploaded Successfully", "status code": 200})
+       return jsonify({"status": "File Uploaded Successfully", "status code": 200})
 
 return app
     
