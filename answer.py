@@ -41,11 +41,11 @@ os.makedirs(dir)
 
 # setting gcs creds for access to bucket
 filecontents = os.environ.get('GCS_CREDS')
-filecontents.replace('@', '=')
+filecontents = filecontents.replace("@", "=")
 decoded_creds = base64.b64decode(filecontents)
-with open('creds.json', 'wb') as f:
-    f.write(decoded_creds)
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = 'creds.json'
+with open('app/creds.json', 'wb') as f1:
+    f1.write(decoded_creds)
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/app/creds.json'
 
 # getting bucket details
 bucket_name = os.environ.get('STORAGE_BUCKET')
