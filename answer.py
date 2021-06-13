@@ -22,7 +22,6 @@ import base64
 import logging
 
 global db
-
 logger = logging.getLogger()
 # importing the psycopg2 module
 import psycopg2
