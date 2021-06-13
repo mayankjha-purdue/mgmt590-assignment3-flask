@@ -6,7 +6,7 @@ from flask import request
 from transformers.pipelines import pipeline
 import os
 import pg8000
-
+import pandas as pd
 global modelList
 global default_model
 import sqlite3
@@ -43,12 +43,12 @@ os.makedirs(dir)
 filecontents = os.environ.get('GCS_CREDS')
 filecontents = filecontents.replace("@", "=")
 decoded_creds = base64.b64decode(filecontents)
-with open('app/creds.json', 'wb') as f1:
+with open('creds.json', 'wb') as f1:
     f1.write(decoded_creds)
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/app/creds.json'
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = 'creds.json'
 
 # getting bucket details
-#bucket_name = os.environ.get('STORAGE_BUCKET')
+# bucket_name = os.environ.get('STORAGE_BUCKET')
 storage_client = storage.Client()
 bucket = storage_client.get_bucket('mgmt590-mayank')
 
@@ -367,18 +367,39 @@ def get_recent_custom(start, end, model):
 def my_funct(text):
     abort(400, text)
 
+# 9. function to check the file extension
+ALLOWED_EXTENSIONS = {'csv'}
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# 10. function to upload file
+def uploadOneFile(bucket, filename):
+    logging.info('Inside File Uploads')
+
+    try:
+        blob = bucket.blob(filename)
+        response = blob.upload_from_filename(filename)
+
+    except Exception as ex:
+        logging.error("Exception occurred while trying to upload files ", ex)
+    return response
+
 @app.route("/upload", methods=['POST'])
 def upload_file():
-   if 'file' not in request.files:
-      return ('No file Provided')
-      file = request.files['file']
-   if file and allowed_file(file.filename):
-      dataFrame = pd.read_csv(file)
-      timestamp = int(time.time())
-      fileName = 'question_context' + '_' + str(timestamp) + '.csv'
-      csvFile = dataFrame.to_csv(fileName, index=False)
-      response = uploadOneFile(bucket, fileName)
-      return jsonify({"status": "File Uploaded Successfully", "status code": 200})
+    if 'file' not in request.files:
+        return ('No file Provided')
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        dataFrame = pd.read_csv(file)
+        timestamp = int(time.time())
+        fileName = 'question_context' + '_' + str(timestamp) + '.csv'
+        csvFile = dataFrame.to_csv(fileName, index=False)
+        response = uploadOneFile(bucket, fileName)
+        return jsonify({"status": "File Uploaded Successfully", "status code": 200})
 
     
 @app.route("/answer", methods=['POST', 'GET'])
