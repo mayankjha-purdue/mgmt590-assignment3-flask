@@ -77,7 +77,7 @@ sslrootcert = "sslrootcert={}".format(".ssl/server-ca.pem")
 sslcert = "sslcert={}".format(".ssl/client-cert.pem")
 sslkey = "sslkey={}".format(".ssl/client-key.pem")
 
-hostaddr = "hostaddr={}".format(os.environ.get('PG_HOST'))
+hostaddr = "34.67.138.137"
 user = "user=postgres"
 password = "password={}".format(os.environ.get('PG_PASSWORD'))
 dbname = "dbname=mgmt590"
