@@ -2,7 +2,6 @@
 
 ## Creating Flask Application with Integrated Testing - Question Answering
 
-
 Purpose of the this hands-on project was to create a REST API inference server that serves inferences from a Transformers NLP model
 The app is deployed at: https://mgmt590-assignment3-flask-flmzcdy22a-uc.a.run.app/
 
@@ -11,7 +10,7 @@ The app is deployed at: https://mgmt590-assignment3-flask-flmzcdy22a-uc.a.run.ap
 
 ## Learning Outcomes
 
-At the end of the this hands-on training, students will be able to;
+At the end of the this hands-on training, students will be able to:
 
 - Understand client-server software architecture.
 
